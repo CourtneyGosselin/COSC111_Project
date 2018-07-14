@@ -1,6 +1,5 @@
-package P4;
-
-
+package project5;
+import P5.Game;
 /* This file includes:
  * 	1. Solution to P3
  *  2. Questions for P4. Comments starting with REQ represent the questions.
@@ -36,7 +35,7 @@ package P4;
 	   2.  If we are out of questions in a category (i.e., all questions in this category were offered and answered correctly), inform the player to choose another category.  
 */
 
-public class Main {				
+public class P5 {				
 	static Game game;			
 	
 	//Two arrays for questions and answers (both are global, i.e., accessible by all code in the class).
@@ -50,7 +49,6 @@ public class Main {
 								 {"Twelve", "Twelve", "2005", "BAU Special Agent", "Yes", "Yes", "Revolver", "Twenty-two", "Yes"},
 								 {"Hand", "Elevate", "Yes", "FAST", "No", "Yes", "Face", "Yes", "Tibia"}
 	};
-	//Shuffles questions and answer order within catagory 
 	public static void shuffleQuestions(String[][] q, String[][] a){
 		for(int r =0; r< 3; r++){
 			for(int s =0; s< q[r].length; s++){
@@ -105,38 +103,39 @@ public class Main {
 			// 		  Assume that an incorrectly answered question will keep popping up until it is correctly answered.
 			//		  Hint: you need to create a for loop that repeats the below code block numQuestions times.
 			//		  Hint: you need to have a variable that keeps track of the next question to be offered. 
-				int k = 0;
-			for(int j = 0; j < numQuestions; j++){
-				for (int i = 0; i < numPlayers; i++) {
-					game.setCurrentPlayer(i);//draw rectangle around player 0, and currentPlayer = player0
-					catagory = game.askForInt("Choose a catagory 1-Supernatural, 2-Criminal Minds, 3-Medical", 1, 3);
+			int k = 0;
+			int t = 0;
+			int a = 0;
+			int b = 0;
+			int c = 0;
+			int row = 0;
+			game.setCurrentPlayer(k);
+			for (int i = 0; i < (numQuestions * numPlayers); i++) {
+				t = 0;
+				game.setCurrentPlayer(i % numPlayers);
+					while (t == 0) {
+					int category = game.askForInt("Pick a Category: 0:supernatural, 1:criminal minds, 2:medical",0,2);
+					if (category==0){row = a; a++;}
+					if (category==1){row = b; b++;}
+					if (category==2){row = c; c++;}
+					if (a<=questions[0].length && b<=questions[0].length && c<=questions[0].length){
+					String ans1 = game.askForText(questions[category][row]);
+					if (ans1.equals(answers[category][row])) {
+						game.correct(); // display "Correct", increment score,
+										// change frame color to green
+						t++;
+					} else {
+						game.incorrect();
+					t++;
+					} // display "incorrect", change frame color of player to
+						// red
 					
-					while((supernatural >= 9 && catagory == 1)|| (criminalminds >= 9 && catagory == 2)|| (medical >= 9 && catagory ==3)){
-						catagory = game.askForInt("No more questions in that catagory. Please choose another one", 1, 3);
-						
-					}
-					if(catagory == 1)
-						k = supernatural;
-					if(catagory == 2)
-						k = criminalminds;
-					if(catagory == 3)
-						k = medical;
-					String answer = game.askForText(questions[catagory-1][k]);
-					if(answers[catagory-1][k].equals(answer)){
-						game.correct();		//display "Correct", increment score, change frame color to green
-						if(questions[catagory-1][k] == questions[0][k])
-							supernatural++;
-						if(questions[catagory-1][k] == questions[1][k])
-							criminalminds++;
-						if(questions[catagory-1][k] == questions[2][k])
-							medical++;
-					}else{
-						game.incorrect();	//display "incorrect", change frame color of player to red	
-					}
-					k++;
-					
-					
-				}
+					game.setCurrentPlayer(k);}
+					else {game.print("No more questions in this Category please select another (Press enter to continue)");
+				if (a>questions[0].length)a--;
+				if (b>questions[0].length)b--;
+				if (c>questions[0].length)c--;
+					}}
 			}
 			
 			//Do you want to play again? make sure you get valid input
